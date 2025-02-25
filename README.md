@@ -85,6 +85,10 @@ Here is a diagram of the pipeline:
 
 <img alt="pipeline.png" src="misc/pipeline.png" width="600"/>
 
+## Titanic - Machine Learning from Disaster Kaggle Competition
+
+A notebook and submission file for the Titanic Kaggle competition can be found in the `notebooks` and `data` directory.
+
 ## Future Works 
 
 - [ ] Add an interface with Streamlit to interact with the API
