@@ -34,7 +34,7 @@ async def perdict(passenger: dict):
     except Exception as e:
         return {"error": str(e)}
 
-    return {"prediction": prediction[0].item()}
+    return {"Survived": prediction[0].item()}
 
 if __name__ == "__main__":
     import uvicorn
