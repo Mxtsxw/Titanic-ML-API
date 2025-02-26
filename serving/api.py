@@ -1,6 +1,7 @@
 import joblib
 import pandas as pd
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
+import io
 
 def drop_columns(X):
     columns = ["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]
@@ -36,6 +37,24 @@ async def perdict(passenger: dict):
 
     return {"Survived": prediction[0].item()}
 
+@app.post("/predict-file")
+async def endpoint(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        data = pd.read_csv(io.StringIO(contents.decode("utf-8")))
+
+        original = data.copy()
+        data = drop_columns(data)
+
+        prediction = pipeline.predict(data)
+
+        # Merge the prediction with the original data
+        original["Survived"] = prediction
+    except Exception as e:
+        return {"error": str(e)}
+
+    return original[["PassengerId", "Survived"]].to_dict(orient="records")
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8080)
